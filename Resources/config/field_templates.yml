@@ -1,0 +1,6 @@
+
+system:
+    default:
+        field_templates:
+            -
+                template: "BlendEzMatrixBundle::matrix_content_field.html.twig"
