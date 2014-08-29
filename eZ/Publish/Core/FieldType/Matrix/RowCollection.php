@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace Blend\EzMatrixBundle\FieldType\Matrix;
+namespace Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * Class RowCollection
  * Collection of Row values for Matrix
  *
- * @package Blend\EzMatrixBundle\FieldType\Matrix
+ * @package Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix
  */
 class RowCollection extends \ArrayObject
 {
@@ -29,7 +29,7 @@ class RowCollection extends \ArrayObject
     public $columnIds = array();
 
     /**
-     * @param \Blend\EzMatrixBundle\FieldType\Matrix\Row[] $elements
+     * @param \Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix\Row[] $elements
      */
     public function __construct( array $elements = array() )
     {
@@ -38,6 +38,10 @@ class RowCollection extends \ArrayObject
         parent::__construct();
         foreach ( $elements as $i => $row )
         {
+            if ( is_array( $row ) )
+            {
+                $row = new Row( $row );
+            }
             $this->offsetSet( $i, $row );
         }
     }
@@ -47,7 +51,7 @@ class RowCollection extends \ArrayObject
      *
      * @throws InvalidArgumentType When $value is not of type Row
      * @param int $offset
-     * @param \Blend\EzMatrixBundle\FieldType\Matrix\Row $value
+     * @param \Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix\Row $value
      */
     public function offsetSet( $offset, $value )
     {
@@ -55,25 +59,13 @@ class RowCollection extends \ArrayObject
         {
             throw new InvalidArgumentType(
                 '$value',
-                'Blend\\EzMatrixBundle\\FieldType\\Matrix\\Row',
+                'Blend\\EzMatrixBundle\\eZ\\Publish\\Core\\FieldType\\Matrix\\Row',
                 $value
             );
         }
 
-        $aRows = $this->getArrayCopy();
         parent::offsetSet( $offset, $value );
         $this->columnIds = array_merge( $this->columnIds, array_keys( $value->columns ) );
-        if ( !isset( $value->id ) || $value->id == -1 )
-        {
-            if ( !empty( $aRows ) )
-            {
-                $value->id = end( $aRows )->id + 1;
-            }
-            else
-            {
-                $value->id = 1;
-            }
-        }
     }
 
     /**

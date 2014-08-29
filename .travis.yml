@@ -1,0 +1,38 @@
+language: php
+
+# run tests on php misc php versions
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+
+matrix:
+    allow_failures:
+        - php: 5.6
+
+# test only master (+ Pull requests)
+branches:
+  only:
+    - master
+    - dev
+    - EZP-23049-price_service
+
+# install dependencies
+install: composer install --dev --prefer-dist
+
+# setup requirements for running unit tests
+before_script:
+  - cp vendor/ezsystems/ezpublish-kernel/config.php-DEVELOPMENT vendor/ezsystems/ezpublish-kernel/config.php
+
+# execute phpunit as the script command
+script:
+  - phpunit -d memory_limit=-1 --colors -c phpunit.xml
+
+# disable mail notifications
+notification:
+  email: false
+
+# reduce depth (history) of git checkout
+git:
+  depth: 30

@@ -1,7 +1,7 @@
 parameters:
-    ezpublish.fieldType.ezmatrix.class:  Blend\EzMatrixBundle\FieldType\Matrix\Type
+    ezpublish.fieldType.ezmatrix.class:  Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix\Type
 
-    ezpublish.fieldType.ezmatrix.converter.class: Blend\EzMatrixBundle\Persistence\Legacy\Content\FieldValue\Converter\Matrix
+    ezpublish.fieldType.ezmatrix.converter.class: Blend\EzMatrixBundle\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Matrix
 
 services:
     ezpublish.fieldType.ezmatrix.converter:

@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace Blend\EzMatrixBundle\FieldType\Matrix;
+namespace Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix;
 
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
@@ -17,10 +17,14 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  * Class Value
  * Represents the contents of a Matrix field
  *
- * @package Blend\EzMatrixBundle\FieldType\Matrix
+ * @package Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix
  */
 class Value extends BaseValue
 {
+    /**
+     * @var string
+     */
+    public $name;
 
     /**
      * @var RowCollection
@@ -33,21 +37,14 @@ class Value extends BaseValue
     public $columns;
 
     /**
-     * @param Row[] $rows
-     * @param Column[] $columns
+     * @param array $data
      */
-    public function __construct( array $rows = array(), $columns=array() )
+    public function __construct( array $data = array() )
     {
-        $this->rows = new RowCollection( $rows );
-
-        if ( $columns )
-        {
-            $this->columns = new ColumnCollection( $columns );
-        }
-        else
-        {
-            $this->columns = ColumnCollection::createFromNames( $this->rows->columnIds );
-        }
+        $this->rows = isset( $data['rows'] ) ? new RowCollection( $data['rows'] ) : new RowCollection( array() );
+        $this->columns = ColumnCollection::createFromNames( $this->rows->columnIds );
+        // name will be label of first column
+        $this->name = count( $this->columns->toArray() ) ? $this->columns->toArray()[0]['name'] : '';
     }
 
     /**
