@@ -107,15 +107,6 @@ class Type extends FieldType
 
     protected function checkValueStructure( BaseValue $value )
     {
-        if ( ! $value->columns instanceof ColumnCollection )
-        {
-            throw  new InvalidArgumentType(
-                '$value->columns',
-                'ColumnCollection',
-                $value->columns
-            );
-        }
-
         if ( ! $value->rows instanceof RowCollection )
         {
             throw  new InvalidArgumentType(
@@ -170,7 +161,7 @@ class Type extends FieldType
     {
         return array(
             'rows' => !empty( $value->rows ) ? $value->rows->toArray() : array(),
-            'columns' => $value->columns->toArray()
+            'columns' => !empty( $value->columns ) ? $value->columns->toArray() : array()
         );
     }
 
@@ -320,13 +311,13 @@ class Type extends FieldType
         }
 
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        print_r( $validatorConfiguration );
         foreach( $validatorConfiguration as $name => $validator )
         {
             switch ( $name )
             {
                 case 'MatrixValidator':
                     $columns = $validator['columns'];
+
                     if ( array_intersect( $fieldValue->rows->columnIds, $columns ) != $columns )
                     {
                         $validationErrors[] = new ValidationError(

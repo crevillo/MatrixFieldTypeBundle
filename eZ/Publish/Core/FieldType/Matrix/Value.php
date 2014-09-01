@@ -37,13 +37,24 @@ class Value extends BaseValue
     public $columns;
 
     /**
-     * @param array $data
+     * Construct the matrix
+     *
+     * @param array $rows
+     * @param array $columns
      */
-    public function __construct( array $data = array() )
+    public function __construct( array $rows = array(), array $columns = array() )
     {
-        $this->rows = isset( $data['rows'] ) ? new RowCollection( $data['rows'] ) : new RowCollection( array() );
-        $this->columns = ColumnCollection::createFromNames( $this->rows->columnIds );
-        // name will be label of first column
+        $this->rows = new RowCollection( $rows );
+
+        if ( $columns )
+        {
+            $this->columns = new ColumnCollection( $columns );
+        }
+        else
+        {
+            $this->columns = ColumnCollection::createFromNames( $this->rows->columnIds );
+        }
+
         $this->name = count( $this->columns->toArray() ) ? $this->columns->toArray()[0]['name'] : '';
     }
 

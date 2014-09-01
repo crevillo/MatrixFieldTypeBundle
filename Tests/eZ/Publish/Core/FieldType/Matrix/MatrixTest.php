@@ -52,7 +52,7 @@ class MatrixTest extends FieldTypeTest
             ),
             'defaultNRows' => array(
                 'type' => 'int',
-                'default' =>1,
+                'default' => 1,
             )
         );
     }
@@ -60,54 +60,6 @@ class MatrixTest extends FieldTypeTest
     protected function getEmptyValueExpectation()
     {
         return new MatrixValue;
-    }
-
-    protected function getColumnConfig()
-    {
-        return array(
-            new Column(
-                array(
-                    'name' => 'name',
-                    'id' => 'name',
-                    'num' => 0
-                )
-            ),
-            new Column(
-                array(
-                    'name' => 'quest',
-                    'id' => 'quest',
-                    'num' => 1
-                )
-            ),
-            new Column(
-                array(
-                    'name' => 'colour',
-                    'id' => 'colour',
-                    'num' => 2
-                )
-            )
-        );
-    }
-
-    protected function getColumnConfigHash()
-    {
-        return array(
-            array(
-                'id' => 'name',
-                'name' => 'name',
-                'num' => 0
-            ),
-            array(
-                'id' => 'quest',
-                'name' => 'quest',
-                'num' => 1
-            ),
-            array(
-                'id' => 'colour',
-                'name' => 'colour',
-                'num' => 2
-            )
-        );
     }
 
     protected function getSingleRow()
@@ -130,6 +82,70 @@ class MatrixTest extends FieldTypeTest
                 'name' => 'Lancelot',
                 'quest' => 'Grail',
                 'colour' => 'blue'
+            )
+        );
+    }
+
+    protected function getMultipleRowsHash()
+    {
+        return array(
+            array(
+                'name' => 'Lancelot',
+                'quest' => 'Grail',
+                'colour' => 'blue'
+            ),
+            array(
+                'name' => 'Gallahad',
+                'quest' => 'Seek Grail',
+                'colour' => 'Blue! no, Red! Augh!'
+            )
+        );
+    }
+
+    protected function getColumnConfig()
+    {
+        return array(
+            new Column(
+                array(
+                    'name' => 'name',
+                    'id' => 'name',
+                    'num' => 1
+                )
+            ),
+            new Column(
+                array(
+                    'name' => 'quest',
+                    'id' => 'quest',
+                    'num' => 2
+                )
+            ),
+            new Column(
+                array(
+                    'name' => 'colour',
+                    'id' => 'colour',
+                    'num' => 3
+                )
+            )
+        );
+    }
+
+    protected function getColumnConfigHash()
+    {
+        return array(
+            array(
+                'id' => 'name',
+                'name' => 'name',
+                'num' => 1
+            ),
+            array(
+                'id' => 'quest',
+                'name' => 'quest',
+                'num' => 2
+            ),
+            array(
+                'id' => 'colour',
+                'name' => 'colour',
+                'num' => 3
             )
         );
     }
@@ -158,11 +174,11 @@ class MatrixTest extends FieldTypeTest
             array(
                 23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            )
-            /*array(
+            ),
+            array(
                 array( 'foo' ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            )*/
+            )
         );
     }
 
@@ -177,15 +193,13 @@ class MatrixTest extends FieldTypeTest
             array(
                 $this->getSingleRow(),
                 new MatrixValue(
-                    $this->getSingleRow(),
-                    $this->getColumnConfig()
+                    $this->getSingleRow()
                 )
             ),
             array(
                 $this->getMultipleRows(),
                 new MatrixValue(
-                    $this->getMultipleRows(),
-                    $this->getColumnConfig()
+                    $this->getMultipleRows()
                 )
             )
         );
@@ -196,13 +210,21 @@ class MatrixTest extends FieldTypeTest
         return array(
             array(
                 new MatrixValue(
-                    array(
-                        'rows' => $this->getSingleRow(),
-                        'columns' => $this->getColumnConfig()
-                    )
+                    $this->getSingleRow(),
+                    $this->getColumnConfig()
                 ),
                 array(
                     'rows' => $this->getSingleRowHash(),
+                    'columns' => $this->getColumnConfigHash()
+                ),
+            ),
+            array(
+                new MatrixValue(
+                    $this->getMultipleRows(),
+                    $this->getColumnConfig()
+                ),
+                array(
+                    'rows' => $this->getMultipleRowsHash(),
                     'columns' => $this->getColumnConfigHash()
                 ),
             )
@@ -213,12 +235,24 @@ class MatrixTest extends FieldTypeTest
     {
         return array(
             array(
+                array( 'rows' => $this->getSingleRowHash() ),
+                new MatrixValue(
+                    $this->getSingleRow()
+                )
+            ),
+            array(
+                array( 'rows' => $this->getMultipleRowsHash() ),
+                new MatrixValue(
+                    $this->getMultipleRows()
+                )
+            ),
+            array(
                 array(
-                    'rows' => $this->getSingleRowHash(),
+                    'rows' => $this->getMultipleRowsHash(),
                     'columns' => $this->getColumnConfigHash()
                 ),
                 new MatrixValue(
-                    $this->getSingleRow(),
+                    $this->getMultipleRows(),
                     $this->getColumnConfig()
                 )
             )
@@ -235,35 +269,27 @@ class MatrixTest extends FieldTypeTest
         return array(
             array(
                 new MatrixValue(
-                    array(
-                        'rows' => $this->getSingleRow(),
-                        'colummns' => $this->getColumnConfig()
-                    )
+                    $this->getSingleRow()
                 ),
                 'name'
             ),
             array(
                 new MatrixValue(
-                    array(
-                        'rows' => $this->getMultipleRows(),
-                        'colummns' => $this->getColumnConfig()
-                    )
+                    $this->getSingleRow(),
+                    $this->getColumnConfig()
                 ),
                 'name'
             ),
             array(
                 new MatrixValue(
-                    array(
-                        'rows' => $this->getSingleRow()
-                    )
+                    $this->getMultipleRows(),
+                    $this->getColumnConfig()
                 ),
                 'name'
             ),
             array(
                 new MatrixValue(
-                    array(
-                        'rows' => $this->getMultipleRows()
-                    )
+                    $this->getMultipleRows()
                 ),
                 'name'
             ),
@@ -278,22 +304,28 @@ class MatrixTest extends FieldTypeTest
     {
         return array(
             array(
-                array(),
+                array(
+                    "validatorConfiguration" => array(
+                        "MatrixValidator" => array(
+                            'columns' => array( 'name', 'quest', 'colour' ),
+                        )
+                    ),
+                ),
                 new MatrixValue(
                     $this->getSingleRow()
                 )
+
             ),
             array(
-                array(),
+                array(
+                    "validatorConfiguration" => array(
+                        "MatrixValidator" => array(
+                            'columns' => array( 'name', 'quest', 'colour' ),
+                        )
+                    ),
+                ),
                 new MatrixValue(
                     $this->getMultipleRows()
-                )
-            ),
-            array(
-                array(),
-                new MatrixValue(
-                    $this->getMultipleRows(),
-                    $this->getColumnConfig()
                 )
             )
         );
@@ -304,18 +336,15 @@ class MatrixTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "MatrixValidator" => array(
-                        'columns' => array( 'id', 'label' ),
+                    "validatorConfiguration" => array(
+                        "MatrixValidator" => array(
+                            'columns' => array( 'name', 'quest', 'colour_faked' ),
+                        )
                     ),
                 ),
                 new MatrixValue(
                     array(
-                        "rows" => array(
-                            array(
-                                'id' => 'dummy',
-                                'label3' => 'text'
-                            )
-                        )
+                        "rows" => $this->getSingleRow()
                     )
                 ),
                 array(
@@ -323,7 +352,30 @@ class MatrixTest extends FieldTypeTest
                         "Keys of provided rows are not equal to the column names",
                         "",
                         array(
-                            "columns" => array( 'id', 'label' )
+                            "columns" => array( 'name', 'quest', 'colour_faked' )
+                        )
+                    )
+                ),
+            ),
+            array(
+                array(
+                    "validatorConfiguration" => array(
+                        "MatrixValidator" => array(
+                            'columns' => array( 'name', 'quest', 'colour_faked' ),
+                        )
+                    ),
+                ),
+                new MatrixValue(
+                    array(
+                        "rows" => $this->getMultipleRows()
+                    )
+                ),
+                array(
+                    new ValidationError(
+                        "Keys of provided rows are not equal to the column names",
+                        "",
+                        array(
+                            "columns" => array( 'name', 'quest', 'colour_faked' )
                         )
                     )
                 ),

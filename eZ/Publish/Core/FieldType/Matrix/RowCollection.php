@@ -59,13 +59,26 @@ class RowCollection extends \ArrayObject
         {
             throw new InvalidArgumentType(
                 '$value',
-                'Blend\\EzMatrixBundle\\eZ\\Publish\\Core\\FieldType\\Matrix\\Row',
+                'Blend\\EzMatrixBundle\\FieldType\\Matrix\\Row',
                 $value
             );
         }
 
+        $aRows = $this->getArrayCopy();
         parent::offsetSet( $offset, $value );
-        $this->columnIds = array_merge( $this->columnIds, array_keys( $value->columns ) );
+        $this->columnIds = array_unique( array_merge( $this->columnIds, array_keys( $value->columns ) ) );
+
+        if ( !isset( $value->id ) || $value->id == -1 )
+        {
+            if ( !empty( $aRows ) )
+            {
+                $value->id = end( $aRows )->id;
+            }
+            else
+            {
+                $value->id = 0;
+            }
+        }
     }
 
     /**
