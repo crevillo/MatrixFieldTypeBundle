@@ -57,13 +57,13 @@ $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'e
 $rows = array(
     // row 0
     array(
-       'col_1' => 'Value for matrix[0][0],
-       'col_2' => 'Value for matrix[0][1]
+       'col_1' => 'Value for matrix[0][0]',
+       'col_2' => 'Value for matrix[0][1]'
     ),
     // row 1
     array(
-       'col_1' => 'Value for matrix[1][0],
-       'col_2' => 'Value for matrix[1][1]
+       'col_1' => 'Value for matrix[1][0]',
+       'col_2' => 'Value for matrix[1][1]'
     )
 )
 contentCreateStruct->setField( 'matrix', $rows );

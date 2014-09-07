@@ -42,18 +42,11 @@ class Value extends BaseValue
      * @param array $rows
      * @param array $columns
      */
-    public function __construct( array $rows = array(), array $columns = array() )
+    public function __construct( array $rows = array() )
     {
         $this->rows = new RowCollection( $rows );
 
-        if ( $columns )
-        {
-            $this->columns = new ColumnCollection( $columns );
-        }
-        else
-        {
-            $this->columns = ColumnCollection::createFromNames( $this->rows->columnIds );
-        }
+        $this->columns = ColumnCollection::createFromNames( $this->rows->columnIds );
 
         $this->name = count( $this->columns->toArray() ) ? $this->columns->toArray()[0]['name'] : '';
     }

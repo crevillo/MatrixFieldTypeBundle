@@ -27,23 +27,6 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  *
  * <code>
  * $hash = array(
- *       'columns' => array(
- *           array(
- *               'id' => 'make',
- *               'name' => 'Make',
- *               'num' => 0
- *           ),
- *           array(
- *               'id' => 'model',
- *               'name' => 'Model',
- *               'num' => 1
- *           ),
- *           array(
- *               'id' => 'year',
- *               'name' => 'Year',
- *               'num' => 2
- *           )
- *       ),
  *       'rows' => array(
  *           array(
  *               'make' => 'Porsche',
@@ -130,7 +113,6 @@ class Type extends FieldType
     public function fromHash( $hash )
     {
         $rows = array();
-        $columns = array();
 
         if ( isset( $hash['rows'] ) )
         {
@@ -143,18 +125,7 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $hash['columns'] ) )
-        {
-            $columns = array_map(
-                function ( $column )
-                {
-                    return new Column( $column );
-                },
-                $hash['columns']
-            );
-        }
-
-        return new Value( $rows, $columns );
+        return new Value( $rows );
     }
 
     public function toHash( SPIValue $value )

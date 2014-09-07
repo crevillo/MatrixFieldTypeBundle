@@ -109,21 +109,21 @@ class MatrixTest extends FieldTypeTest
                 array(
                     'name' => 'name',
                     'id' => 'name',
-                    'num' => 1
+                    'num' => 0
                 )
             ),
             new Column(
                 array(
                     'name' => 'quest',
                     'id' => 'quest',
-                    'num' => 2
+                    'num' => 1
                 )
             ),
             new Column(
                 array(
                     'name' => 'colour',
                     'id' => 'colour',
-                    'num' => 3
+                    'num' => 2
                 )
             )
         );
@@ -135,17 +135,17 @@ class MatrixTest extends FieldTypeTest
             array(
                 'id' => 'name',
                 'name' => 'name',
-                'num' => 1
+                'num' => 0
             ),
             array(
                 'id' => 'quest',
                 'name' => 'quest',
-                'num' => 2
+                'num' => 1
             ),
             array(
                 'id' => 'colour',
                 'name' => 'colour',
-                'num' => 3
+                'num' => 2
             )
         );
     }
@@ -210,8 +210,7 @@ class MatrixTest extends FieldTypeTest
         return array(
             array(
                 new MatrixValue(
-                    $this->getSingleRow(),
-                    $this->getColumnConfig()
+                    $this->getSingleRow()
                 ),
                 array(
                     'rows' => $this->getSingleRowHash(),
@@ -220,8 +219,7 @@ class MatrixTest extends FieldTypeTest
             ),
             array(
                 new MatrixValue(
-                    $this->getMultipleRows(),
-                    $this->getColumnConfig()
+                    $this->getMultipleRows()
                 ),
                 array(
                     'rows' => $this->getMultipleRowsHash(),
