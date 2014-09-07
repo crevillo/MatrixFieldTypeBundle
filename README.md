@@ -3,16 +3,15 @@ EzMatrixBundle
 
 Support for matrix in eZ Publish 5.x
 
-FieldDefinition
----------------
+Provide FieldDefinition
+-----------------------
 
-It allows to add the legacy know as ezmatrix datatype to a eZ5 ContentType using the new API.
-
-For that you need to pass an array of columns as fieldSettings of the fieldDefinition.
-You may also pass a `defaultNRows`value to specifiy the default number of rows your matrix will have.
+To add an attribute of this FieldType to any of your ContentTypes you need  to pass an array of columns as fieldSettings
+of the FieldDefinition. You may also pass a `defaultNRows`value to specifiy the default number of rows your matrix will
+have. If this value is not provided, 1 will be taken as default
 
 Columns needs to be an array of associative arrays having id and label as keys provided in the order you
-want the columns appear in the matrix
+want the columns appear in the matrix.
 
 
 Example
@@ -43,5 +42,51 @@ $matrixField = new FieldDefinitionCreateStruct(
 );
 
 ```
+
+Provide Field Value
+-------------------
+
+In order to add value to Matrix Field you need to pass an array of associative arrays. These associative arrays will
+consists in pairs of columns ids and values
+
+Example
+```php
+<?php
+$contentType = $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier );
+$contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+$rows = array(
+    // row 0
+    array(
+       'col_1' => 'Value for matrix[0][0],
+       'col_2' => 'Value for matrix[0][1]
+    ),
+    // row 1
+    array(
+       'col_1' => 'Value for matrix[1][0],
+       'col_2' => 'Value for matrix[1][1]
+    )
+)
+contentCreateStruct->setField( 'matrix', $rows );
+```
+
+Validation
+----------
+
+A validation is performed when the field value is provided. It will compare the keys passed in the field value rows
+with the ids of the columns defined in the FieldDefinition part.
+
+If any of the keys of the rows are not present in the columns Ids, validation will fail and you won't be able
+to create your Value.
+
+Example, this will fail...
+```php
+rows = array(
+    // row 0
+    array(
+       'col_1_1' => 'Value for matrix[0][0],
+    ),
+)
+```
+
 
 
