@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace Blend\EzMatrixBundle\Persistence\Legacy\Content\FieldValue\Converter;
+namespace Blend\EzMatrixBundle\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -26,6 +26,8 @@ use DOMDocument;
  */
 class Matrix implements Converter
 {
+
+    const MATRIX_VALIDATOR_IDENTIFIER = "MatrixValidator";
 
     /**
      * Factory for current class
@@ -69,7 +71,40 @@ class Matrix implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        // Nothing to store
+        $storageDef->dataText5 = $this->generateXmlDefinitionString(
+            $fieldDef->fieldTypeConstraints->fieldSettings["columns"]
+        );
+
+        $storageDef->dataInt1 = isset( $fieldDef->fieldTypeConstraints->fieldSettings["defaultNRows"] )
+            ? $fieldDef->fieldTypeConstraints->fieldSettings["defaultNRows"]
+            : 1;
+    }
+
+    /**
+     * Generates the xml to be saved in the 'data_text5' column
+     * of the 'ezcontenclass_attribute' row for the field
+     *
+     * @param array $columns
+     *
+     * @return string
+     */
+    private function generateXmlDefinitionString( array $columns )
+    {
+        $doc = new DOMDocument( '1.0', 'utf-8' );
+        $root = $doc->createElement( 'ezmatrix' );
+
+        foreach ( $columns as $index => $data )
+        {
+            $column = $doc->createElement( 'column-name', $data['label'] );
+            $column->setAttribute( 'id', $data['id'] );
+            $column->setAttribute( 'idx', $index );
+            $root->appendChild( $column );
+        }
+
+        $doc->appendChild( $root );
+
+        return $doc->saveXML();
+
     }
 
     /**
@@ -80,7 +115,14 @@ class Matrix implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->defaultValue->data = array();
+        $validatorConstraints = array();
+
+        if ( !empty( $storageDef->dataText5 ) )
+        {
+            $validatorConstraints[self::MATRIX_VALIDATOR_IDENTIFIER]['columns'] = $this->getColumnNamesFromXml( $storageDef->dataText5 );
+        }
+
+        $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
     }
 
     /**
@@ -244,5 +286,27 @@ class Matrix implements Converter
         }
 
         return array( 'rows' => $rows, 'columns' => $columns );
+    }
+
+    /**
+     * Gets an array of columns ids from the text stored in the 'data_text5' column
+     *
+     * @param string $xmlText
+     */
+    private function getColumnNamesFromXml( $xmlString = '' )
+    {
+        $dom = new DOMDocument( '1.0', 'utf-8' );
+
+        $columns = array();
+
+        if ( $dom->loadXML( $xmlString ) === true )
+        {
+            foreach ( $dom->getElementsByTagName( 'column-name' ) as $column )
+            {
+                $columns[] = $column->getAttribute( 'id' );
+            }
+        }
+
+        return $columns;
     }
 }

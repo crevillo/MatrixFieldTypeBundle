@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace Blend\EzMatrixBundle\FieldType\Matrix;
+namespace Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
@@ -17,13 +17,13 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * Class ColumnCollection
  * Collection of Column values for Matrix
  *
- * @package Blend\EzMatrixBundle\FieldType\Matrix
+ * @package Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix
  */
 class ColumnCollection extends \ArrayObject
 {
 
     /**
-     * @param \Blend\EzMatrixBundle\FieldType\Matrix\Column[] $elements
+     * @param \Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix\Column[] $elements
      */
     public function __construct( array $elements = array() )
     {
@@ -39,27 +39,30 @@ class ColumnCollection extends \ArrayObject
     /**
      * Create a ColumnCollection from an array of field names.
      * The ids will be auto-generated based on the names.
-     * @param array $names
+     * @param array|null $names
      *
      * @return ColumnCollection
      */
-    public static function createFromNames( array $names = array() )
+    public static function createFromNames( $names = array() )
     {
         $columns = array();
-        $i = 1;
+        $i = 0;
 
-        foreach ( $names as $name )
+        if ( $names != null )
         {
-            $id = strtolower(
-                preg_replace(
-                    array( '/\s+/', '/[^a-z0-9_]/i' ),
-                    array( '_', '' ),
-                    $name
-                )
-            );
+            foreach ( $names as $name )
+            {
+                $id = strtolower(
+                    preg_replace(
+                        array( '/\s+/', '/[^a-z0-9_]/i' ),
+                        array( '_', '' ),
+                        $name
+                    )
+                );
 
-            $columns[] = new Column( array( 'id' => $id, 'name' => $name, 'num' => $i ) );
-            $i++;
+                $columns[] = new Column( array( 'id' => $id, 'name' => $name, 'num' => $i ) );
+                $i++;
+            }
         }
 
         return new self( $columns );
@@ -70,7 +73,7 @@ class ColumnCollection extends \ArrayObject
      *
      * @throws InvalidArgumentType When $value is not of type Column
      * @param int $offset
-     * @param \Blend\EzMatrixBundle\FieldType\Matrix\Column $value
+     * @param \Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix\Column $value
      */
     public function offsetSet( $offset, $value )
     {

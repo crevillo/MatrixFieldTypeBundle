@@ -10,7 +10,7 @@
  * @version //autogentag//
  */
 
-namespace Blend\EzMatrixBundle\FieldType\Matrix;
+namespace Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
@@ -18,7 +18,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  * Class Column
  * Column represents a single configured Column for a Matrix
  *
- * @package Blend\EzMatrixBundle\FieldType\Matrix
+ * @package Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix
  */
 class Column extends ValueObject
 {
@@ -42,7 +42,7 @@ class Column extends ValueObject
 
     public function __toString()
     {
-        return $this->name;
+        return (string)$this->name;
     }
 
     /**

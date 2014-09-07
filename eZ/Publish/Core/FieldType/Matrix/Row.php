@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace Blend\EzMatrixBundle\FieldType\Matrix;
+namespace Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  * Class Row
  * Represents a Row in a Matrix
  *
- * @package Blend\EzMatrixBundle\FieldType\Matrix
+ * @package Blend\EzMatrixBundle\eZ\Publish\Core\FieldType\Matrix
  */
 class Row extends ValueObject
 {
