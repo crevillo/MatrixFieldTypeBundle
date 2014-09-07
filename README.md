@@ -22,7 +22,7 @@ $matrixField = new FieldDefinitionCreateStruct(
     array(
         'fieldTypeIdentifier' => 'ezmatrix',
         'identifier' => 'matrix',
-        'names' => array( 'esl-ES' => 'Matriz de Enlaces' ),
+        'names' => array( 'eng-GB' => 'Matrix' ),
         'position' => 2,
         'isRequired' => true,
         'isSearchable' => false,
