@@ -83,7 +83,7 @@ Example, this will fail...
 rows = array(
     // row 0
     array(
-       'col_1_1' => 'Value for matrix[0][0],
+       'col_1_1' => 'Value for matrix[0][0]',
     ),
 )
 ```
